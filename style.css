@@ -1,0 +1,81 @@
+/* 1. CSS Reset: Removes browser default margins/paddings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. Page Layout */
+body {
+  background-color: #f0f2f5;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* 3. Card Container */
+.profile-card {
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 300px;
+}
+
+/* 4. Profile Image */
+.avatar {
+  width: 120px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #2563eb;
+  margin-bottom: 15px;
+}
+
+/* 5. Name */
+h1 {
+  color: #1e293b;
+  font-size: 23px;
+  margin-bottom: 30px;
+}
+
+/* 6. Role */
+.role {
+  color: #666;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* 7. Bio (Previously unstyled!) */
+.bio {
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+/* 8. Button */
+button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+}
+
+/* 9. JavaScript Greeting Message (Previously unstyled!) */
+#greeting-message {
+  color: #508ced;
+  font-size: 15px;
+  margin-top: 15px;
+  min-height: 20px; /* Prevents the card from jumping when text appears */
