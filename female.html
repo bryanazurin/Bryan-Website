@@ -34,15 +34,16 @@
   <div class="card">
     <h1>Welcome to the Female section!</h1>
     <p>Please go to the male section temporarily. <br>"If you value your peace". </p>
-    <a href="fc.html">Go Back</a>
+    <a href="fc.html" id="backBtn">Go Back</a>
   </div>
+  
   <script src="https://jsdelivr.net"></script>
 
   <script>
     const backBtn = document.getElementById('backBtn');
 
     backBtn.addEventListener('click', function(e) {
-      e.preventDefault(); // Stops instant page jump so confetti can play
+      e.preventDefault(); /* Stops instant page jump so confetti can play */
 
       // Fire birthday confetti explosion from the center
       confetti({
