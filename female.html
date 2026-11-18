@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Female Page</title>
   <style>
     body {
@@ -10,7 +11,9 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
       font-family: Arial, sans-serif;
+      overflow: hidden;
     }
     .card {
       background-color: #c9babc;
@@ -18,6 +21,8 @@
       border-radius: 15px;
       text-align: center;
       width: 300px;
+      position: relative;
+      z-index: 2;
     }
     a {
       display: inline-block;
@@ -28,35 +33,89 @@
       padding: 8px 16px;
       border-radius: 8px;
     }
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
   </style>
 </head>
 <body>
+
+  <canvas id="confettiCanvas"></canvas>
+
   <div class="card">
     <h1>Welcome to the Female section!</h1>
-    <p>Please go to the male section temporarily. <br>"If you value your peace". </p>
+    <p>Please go to the male section temporarily.<br>"If you value your peace".</p>
     <a href="fc.html" id="backBtn">Go Back</a>
   </div>
-  
- <script src="https://jsdelivr.net"></script>
 
   <script>
     const backBtn = document.getElementById('backBtn');
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
 
-    backBtn.addEventListener('click', function(e) {
-      e.preventDefault(); /* Stops instant page jump so confetti can play */
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-      // Fire birthday confetti explosion from the center
-      confetti({
-        particleCount: 120,
-        spread: 80,
-        origin: { y: 0.6 }
+    const colors = ['#ff4d6d', '#ffb703', '#3a86ff', '#8338ec', '#06d6a0', '#ffbe0b'];
+    let pieces = [];
+
+    function launchConfetti() {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      for (let i = 0; i < 120; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 10 + 4;
+        pieces.push({
+          x: centerX,
+          y: centerY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 4,
+          size: Math.random() * 8 + 5,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 12
+        });
+      }
+      animateConfetti();
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      pieces.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35; // gravity
+        p.vx *= 0.98; // air drag
+        p.rotation += p.rotSpeed;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+        ctx.restore();
       });
 
-      // Wait 1.2 seconds (1200ms) for confetti to burst, then go back to fc.html
+      requestAnimationFrame(animateConfetti);
+    }
+
+    backBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      launchConfetti();
+
       setTimeout(() => {
         window.location.href = 'fc.html';
       }, 1200);
     });
   </script>
+
 </body>
 </html>
