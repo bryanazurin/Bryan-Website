@@ -17,6 +17,7 @@ body {
 
 /* 3. Card Container */
 .profile-card {
+  position: relative;     	  /* fngprnt */
   background-color: #c9babc;  	   /* nw color */
   padding: 30px;
   border-radius: 15px;
@@ -24,6 +25,22 @@ body {
   text-align: center;
   width: 90%;   /* phoneee */
   max-width: 300px; /* phoneee */
+}
+
+/* arrowww */
+.next-arrow {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  text-decoration: none;
+  font-size: 24px;
+  color: #222;
+  font-weight: bold;
+  transition: transform 0.2s ease;
+}
+
+.next-arrow:hover {
+  transform: translateX(4px);
 }
 
 /* 4. Profile Image */
@@ -35,6 +52,7 @@ body {
   border: 1.5px solid #888d98;
   margin-bottom: 15px;
 }
+/* arrowww end */
 
 /* 5. Name */
 h1 {
@@ -68,10 +86,15 @@ button {
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.2s ease, transform 0.1s ease; /* Smooth animation */
 }
 
 button:hover {
   background-color: #1d4ed8;
+}
+
+button:active {
+  transform: scale(0.92); /* Shrinks slightly when clicked/pressed */
 }
 
 /* 9. JavaScript Greeting Message (Previously unstyled!) */
