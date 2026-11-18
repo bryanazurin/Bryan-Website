@@ -7,7 +7,7 @@
 
 /* 2. Page Layout */
 body {
-  background-color: #cbcfd4;
+  background-color: #37383a;        /* nw color */
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
@@ -17,7 +17,7 @@ body {
 
 /* 3. Card Container */
 .profile-card {
-  background-color: white;
+  background-color: #c9babc;  	   /* nw color */
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
