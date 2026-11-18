@@ -22,7 +22,8 @@ body {
   border-radius: 15px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
-  width: 300px;
+  width: 90%;   /* phoneee */
+  max-width: 300px; /* phoneee */
 }
 
 /* 4. Profile Image */
