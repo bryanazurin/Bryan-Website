@@ -103,3 +103,51 @@ button:active {
   font-size: 15px;
   margin-top: 15px;
   min-height: 20px; /* Prevents the card from jumping when text appears */
+}
+
+.wave {
+  display: inline-block;
+  transform-origin: 70% 70%;
+  will-change: transform;
+}
+
+@keyframes wave-animation {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.avatar-wrapper .avatar {
+  position: relative;
+  z-index: 2; /* Keeps your photo frame in front of the stickman's lower body */
+  margin-bottom: 0; /* Moved margin to .avatar-wrapper */
+}
+
+.peeking-stickman {
+  position: absolute;
+  left: -34px;
+  bottom: 12px;
+  z-index: 1;
+  overflow: visible;
+}
+
+
+
+
+
+
+
+
+
+

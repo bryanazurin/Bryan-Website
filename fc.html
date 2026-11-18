@@ -267,7 +267,41 @@
     thumb.addEventListener('touchstart', startDrag);
     window.addEventListener('touchmove', onDrag);
     window.addEventListener('touchend', endDrag);
-  </script>
 
+
+  const backBtn = document.querySelector('.back-btn');
+
+  if (backBtn) {
+          backBtn.addEventListener('click', function(event) {
+          event.preventDefault(); // Pauses immediate navigation
+          const destination = this.href; // Saves "index.html"
+          let position = 0;
+          let opacity = 1;
+
+          function shootLeft() {
+        position -= 6; // Negative number shoots the arrow to the left!
+        opacity -= 0.06; // Fades out smoothly
+        backBtn.style.transform = `translateX(${position}px)`;
+        backBtn.style.opacity = opacity;
+
+        if (opacity > 0) {
+          requestAnimationFrame(shootLeft);
+        } else {
+          window.location.href = destination; // Returns to index.html
+        }
+      }
+
+      shootLeft();
+    });
+  }
+
+  // Resets the arrow if the user navigates back here later
+  window.addEventListener('pageshow', function() {
+    if (backBtn) {
+      backBtn.style.transform = 'translateX(0px)';
+      backBtn.style.opacity = '1';
+    }
+  });
+</script>
 </body>
 </html>
