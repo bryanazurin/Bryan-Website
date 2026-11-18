@@ -28,11 +28,11 @@ body {
 
 /* 4. Profile Image */
 .avatar {
-  width: 120px;
-  height: 150px;
-  border-radius: 50%;
+  width: 100px;       /* boxy face frame */
+  height: 120px;      /* boxy face frame */
+  border-radius: 10px; /* boxy face frame */
   object-fit: cover;
-  border: 1.5px solid #2563eb;
+  border: 1.5px solid #888d98;
   margin-bottom: 15px;
 }
 
