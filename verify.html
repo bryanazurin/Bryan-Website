@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verification</title>
+  <title>Demo Verification System</title>
+  <script src="https://cloudflare.com"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -40,6 +41,11 @@
       background: #888;
       cursor: not-allowed;
     }
+    .download-btn {
+      background: #198754;
+      display: none;
+      margin: 10px auto;
+    }
     .warning {
       color: #cc0000;
       font-weight: bold;
@@ -61,8 +67,8 @@
   </style>
 </head>
 <body>
-  <h1>Verification</h1>
-  <p class="warning">THIS IS A DEMO ONLY. Data auto-deletes in 24hrs.</p>
+  <h1>DEMO Verification System</h1>
+  <p class="warning">THIS IS A DEMO ONLY. NOT CONNECTED TO REAL NBI. Data auto-deletes in 24hrs.</p>
   <br><br>
 
   <input type="text" id="name" placeholder="Enter Full Name"><br><br>
@@ -78,19 +84,19 @@
   <br>
   <button type="button" id="submitBtn" onclick="submitDemo()">Submit & Generate Certificate</button>
   <p id="result"></p>
+  <button type="button" id="downloadBtn" class="download-btn" onclick="downloadPDF()">Download Demo Certificate (PDF)</button>
 
   <br>
-  <a href="https://bryanazurin.github.io/Bryan-Website/male.html" style="display: inline-block; padding: 10px 20px; background: #555; color: white; text-decoration: none; border-radius: 5px; font-size: 15px;">
+  <a href="https://github.io" style="display: inline-block; padding: 10px 20px; background: #555; color: white; text-decoration: none; border-radius: 5px; font-size: 15px;">
     Go Back
   </a>
-
 
   <script>
     let facePhoto = '';
     let handPhoto = '';
+    let certData = null;
     const video = document.getElementById('video');
 
-    // Start single webcam stream
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
         video.srcObject = stream;
@@ -125,6 +131,7 @@
       const fullName = document.getElementById('name').value.trim();
       const resultEl = document.getElementById('result');
       const submitBtn = document.getElementById('submitBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
 
       if (!fullName || !facePhoto || !handPhoto) {
         alert('Please enter a name and capture both your face and hand photos first.');
@@ -132,6 +139,7 @@
       }
 
       submitBtn.disabled = true;
+      downloadBtn.style.display = 'none';
       resultEl.innerText = 'Processing demo verification...';
 
       try {
@@ -147,12 +155,67 @@
           resultEl.innerText = 'Error: ' + (data.error || 'Submission failed');
         } else {
           resultEl.innerText = `Result: ${data.result} | Certificate ID: ${data.id}`;
+          certData = {
+            name: fullName,
+            result: data.result,
+            id: data.id,
+            date: new Date().toLocaleString()
+          };
+          downloadBtn.style.display = 'inline-block';
         }
       } catch (err) {
         resultEl.innerText = 'Network error: ' + err.message;
       } finally {
         submitBtn.disabled = false;
       }
+    }
+
+    function downloadPDF() {
+      if (!certData) return;
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Header Banner
+      doc.setFillColor(204, 0, 0);
+      doc.rect(15, 15, 180, 12, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text('DEMO PROTOTYPE ONLY - NOT AN OFFICIAL GOVERNMENT DOCUMENT', 105, 23, { align: 'center' });
+
+      // Title
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(20);
+      doc.text('DEMO VERIFICATION CERTIFICATE', 105, 45, { align: 'center' });
+
+      doc.setLineWidth(0.5);
+      doc.line(20, 52, 190, 52);
+
+      // Details
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Certificate ID: ${certData.id}`, 20, 68);
+      doc.text(`Date & Time Issued: ${certData.date}`, 20, 78);
+      doc.text(`Applicant Name: ${certData.name.toUpperCase()}`, 20, 88);
+
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Verification Status: ${certData.result}`, 20, 102);
+
+      // Captured Photos
+      doc.setFontSize(10);
+      doc.text('Captured Face:', 20, 118);
+      doc.addImage(facePhoto, 'PNG', 20, 122, 65, 48);
+
+      doc.text('Captured Hand:', 110, 118);
+      doc.addImage(handPhoto, 'PNG', 110, 122, 65, 48);
+
+      // Footer
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
+      doc.text('Generated for testing purposes only. Uploaded images auto-delete within 24 hours.', 105, 195, { align: 'center' });
+
+      doc.save(`Demo-Certificate-${certData.id}.pdf`);
     }
   </script>
 </body>
