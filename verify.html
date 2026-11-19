@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Verification System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    video {
+      border: 2px solid #333;
+      border-radius: 10px;
+      width: 300px;
+      height: 225px;
+      background: #000;
+      object-fit: cover;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 280px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      background: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #888;
+      cursor: not-allowed;
+    }
+    .warning {
+      color: #cc0000;
+      font-weight: bold;
+      background: #ffe6e6;
+      padding: 10px;
+      border-radius: 5px;
+      display: inline-block;
+    }
+    .status {
+      font-size: 14px;
+      color: green;
+      font-weight: bold;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>DEMO Verification System</h1>
+  <p class="warning">THIS IS A DEMO ONLY. NOT CONNECTED TO REAL NBI. Data auto-deletes in 24hrs.</p>
+  <br><br>
+
+  <input type="text" id="name" placeholder="Enter Full Name"><br><br>
+
+  <h3>Live Camera Preview</h3>
+  <video id="video" autoplay playsinline></video><br>
+  
+  <button type="button" onclick="takePhoto('face')">1. Capture Face</button>
+  <button type="button" onclick="takePhoto('hand')">2. Capture Hand</button>
+
+  <p class="status" id="captureStatus">Face: Not captured | Hand: Not captured</p>
+
+  <br>
+  <button type="button" id="submitBtn" onclick="submitDemo()">Submit & Generate Certificate</button>
+  <p id="result"></p>
+
+  <script>
+    let facePhoto = '';
+    let handPhoto = '';
+    const video = document.getElementById('video');
+
+    // Start single webcam stream
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        alert('Camera access denied or unavailable: ' + err.message);
+      });
+
+    function takePhoto(type) {
+      if (!video.srcObject) {
+        alert('Please allow camera access first.');
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 300;
+      canvas.height = 225;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      if (type === 'face') {
+        facePhoto = canvas.toDataURL('image/png');
+      } else {
+        handPhoto = canvas.toDataURL('image/png');
+      }
+
+      document.getElementById('captureStatus').innerText =
+        `Face: ${facePhoto ? 'Captured ✓' : 'Not captured'} | Hand: ${handPhoto ? 'Captured ✓' : 'Not captured'}`;
+    }
+
+    async function submitDemo() {
+      const fullName = document.getElementById('name').value.trim();
+      const resultEl = document.getElementById('result');
+      const submitBtn = document.getElementById('submitBtn');
+
+      if (!fullName || !facePhoto || !handPhoto) {
+        alert('Please enter a name and capture both your face and hand photos first.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      resultEl.innerText = 'Processing demo verification...';
+
+      try {
+        const res = await fetch('/api/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: fullName, facePhoto, handPhoto })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          resultEl.innerText = 'Error: ' + (data.error || 'Submission failed');
+        } else {
+          resultEl.innerText = `Result: ${data.result} | Certificate ID: ${data.id}`;
+        }
+      } catch (err) {
+        resultEl.innerText = 'Network error: ' + err.message;
+      } finally {
+        submitBtn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
