@@ -4,7 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Demo Verification System</title>
-  <script src="https://cloudflare.com"></script>
+  <script>
+    (function() {
+      var s = document.createElement('script');
+      s.src = 'https://cloudflare.com' + '/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      s.onerror = function() {
+        var b = document.createElement('script');
+        b.src = 'https://unpkg.com' + '/jspdf@2.5.1/dist/jspdf.umd.min.js';
+        document.head.appendChild(b);
+      };
+      document.head.appendChild(s);
+    })();
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
