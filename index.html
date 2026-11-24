@@ -38,5 +38,26 @@
 
   <!-- Links the JavaScript action file -->
   <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseUrl = 'https://nfikphlsjlfgypzxgmwz.supabase.co';
+  const supabaseKey = 'sb_publishable_T7FRablbwthO9Wlt0-d-Og_U4cFwhJA';
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function logPageVisit() {
+    const { error } = await supabaseClient
+      .from('page_visits')
+      .insert([
+        {
+          page: window.location.pathname,
+          device: navigator.userAgent
+        }
+      ]);
+    if (error) console.error('Visit log error:', error);
+  }
+
+  logPageVisit();
+</script>
+
 </body>
 </html>
